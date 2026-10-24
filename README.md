@@ -250,6 +250,7 @@ in [DECISIONS.md](DECISIONS.md).
 - Assessment-plan/results awareness in `gaps` (assessed vs merely claimed)
 - FedRAMP-specific checks (required props, `implementation-status` conventions)
 - Profile diffing at the directive level ("which alter changed AC-2?")
+- Verify back-matter rlink `hashes` when fetching imports
 
 ## Data and license
 
