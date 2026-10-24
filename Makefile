@@ -64,9 +64,14 @@ fuzz:
 fetch-content:
 	./scripts/fetch-nist-content.sh
 
+# Physical lines, and code lines (excluding blank lines and // comment lines).
 loc:
-	@echo "non-test Go source lines:"; find . -name '*.go' ! -name '*_test.go' -not -path './.git/*' | xargs wc -l | tail -1
-	@echo "test Go source lines:"; find . -name '*_test.go' -not -path './.git/*' | xargs wc -l | tail -1
+	@printf "non-test Go: %s lines, %s code lines\n" \
+	  "$$(find . -name '*.go' ! -name '*_test.go' -not -path './.git/*' -exec cat {} + | wc -l | tr -d ' ')" \
+	  "$$(find . -name '*.go' ! -name '*_test.go' -not -path './.git/*' -exec cat {} + | grep -cvE '^[[:space:]]*(//|$$)')"
+	@printf "test Go:     %s lines, %s code lines\n" \
+	  "$$(find . -name '*_test.go' -not -path './.git/*' -exec cat {} + | wc -l | tr -d ' ')" \
+	  "$$(find . -name '*_test.go' -not -path './.git/*' -exec cat {} + | grep -cvE '^[[:space:]]*(//|$$)')"
 
 clean:
 	rm -rf bin out coverage.out coverage.html
