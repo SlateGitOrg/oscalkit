@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/archit2501/oscalkit/check"
 	"github.com/archit2501/oscalkit/oscal"
 	"github.com/archit2501/oscalkit/schema"
 	"github.com/archit2501/oscalkit/sspgen"
@@ -70,6 +71,21 @@ func runGenerate(ctx context.Context, e *env, args []string) int {
 	}
 	if len(vs) > 0 {
 		return e.errorf("generate: produced a schema-invalid SSP (bug): %v", vs[0])
+	}
+	// Self-check: and it must pass the semantic checks (unique uuids,
+	// resolvable references, allowed implementation states) that
+	// `oscalkit validate` applies, so no invalid file is ever written.
+	decoded, err := oscal.Decode(data, "")
+	if err != nil {
+		return e.errorf("generate: %v", err)
+	}
+	if fs := check.Document(decoded); check.Errors(fs) > 0 {
+		for _, f := range fs {
+			if f.Severity == check.Error {
+				fmt.Fprintf(e.stderr, "  %s\n", f)
+			}
+		}
+		return e.errorf("generate: the generated SSP fails %d semantic check(s); nothing was written", check.Errors(fs))
 	}
 	if err := writeDoc(e, *out, oscal.Document{SSP: res.SSP}); err != nil {
 		return e.errorf("generate: %v", err)

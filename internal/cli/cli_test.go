@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -315,4 +316,86 @@ func TestExampleDraftSSP(t *testing.T) {
 			t.Errorf("missing %s gap for %s", kind, ctl)
 		}
 	}
+}
+
+// Regression: a component that repeats its controls in a second
+// control-implementation used to produce an SSP with duplicate uuids, and
+// generate wrote it with exit 0 because its self-check was schema-only.
+func TestGenerateRepeatedControlImplementationIsValid(t *testing.T) {
+	dir := t.TempDir()
+	raw, err := os.ReadFile(filepath.Join(exComps, "acme-sso_component.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc map[string]any
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		t.Fatal(err)
+	}
+	comp := doc["component-definition"].(map[string]any)["components"].([]any)[0].(map[string]any)
+	cis := comp["control-implementations"].([]any)
+	var second map[string]any
+	_ = json.Unmarshal(mustJSON(t, cis[0]), &second)
+	second["uuid"] = "bbbbbbbb-0000-4000-8000-000000000002"
+	second["source"] = "https://example.org/NIST_SP-800-53_rev5_LOW-baseline_profile.json"
+	for i, ir := range second["implemented-requirements"].([]any) {
+		irm := ir.(map[string]any)
+		irm["uuid"] = fmt.Sprintf("bbbbbbbb-0000-4000-8000-1000000000%02d", i)
+		sts, _ := irm["statements"].([]any)
+		for j, st := range sts {
+			st.(map[string]any)["uuid"] = fmt.Sprintf("bbbbbbbb-0000-4000-8000-2000000%02d%03d", i, j)
+		}
+	}
+	comp["control-implementations"] = append(cis, second)
+	twice := filepath.Join(dir, "sso-twice.json")
+	if err := os.WriteFile(twice, mustJSON(t, doc), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if out, _, code := runCLI(t, "validate", twice); code != ExitOK {
+		t.Fatalf("the input itself must be valid: %d %s", code, out)
+	}
+	ssp := filepath.Join(dir, "ssp.json")
+	_, errOut, code := runCLI(t, "generate", "--seed", "s", "--profile", exProfile, "--component", twice, "-o", ssp)
+	if code != ExitOK || !strings.Contains(errOut, "merged-implementations") {
+		t.Fatalf("generate: %d %s", code, errOut)
+	}
+	if out, _, code := runCLI(t, "validate", ssp); code != ExitOK {
+		t.Fatalf("generated SSP must validate: %d %s", code, out)
+	}
+}
+
+// The generate self-check includes the semantic checks: an input that
+// yields a schema-valid but semantically invalid SSP (here an
+// implementation-status outside OSCAL's allowed values) is refused and
+// nothing is written.
+func TestGenerateSemanticSelfCheck(t *testing.T) {
+	dir := t.TempDir()
+	raw, err := os.ReadFile(filepath.Join(exComps, "acme-sso_component.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	bad := strings.Replace(string(raw), `"value": "partial"`, `"value": "mostly-done"`, 1)
+	if bad == string(raw) {
+		t.Fatal("fixture no longer has a partial status to corrupt")
+	}
+	in := filepath.Join(dir, "bad.json")
+	if err := os.WriteFile(in, []byte(bad), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	out := filepath.Join(dir, "ssp.json")
+	_, errOut, code := runCLI(t, "generate", "--seed", "s", "--profile", exProfile, "--component", in, "-o", out)
+	if code == ExitOK || !strings.Contains(errOut, "semantic check") || !strings.Contains(errOut, "mostly-done") {
+		t.Fatalf("want a semantic self-check failure: %d %s", code, errOut)
+	}
+	if _, err := os.Stat(out); !os.IsNotExist(err) {
+		t.Fatal("nothing may be written when the self-check fails")
+	}
+}
+
+func mustJSON(t *testing.T, v any) []byte {
+	t.Helper()
+	b, err := json.Marshal(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return b
 }
