@@ -211,7 +211,7 @@ func nearestIncludedAncestor(h *hierarchy, id string, inc map[string]bool) strin
 
 type customCtx struct {
 	pool       []oscal.Control // included controls available to insert-controls
-	h          *hierarchy // hierarchy over the pool's controls only
+	h          *hierarchy      // hierarchy over the pool's controls only
 	srcGroups  map[string]oscal.Group
 	usedParams map[string]bool
 }

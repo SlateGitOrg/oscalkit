@@ -43,12 +43,12 @@ type Capability struct {
 // ControlImplementation is a set of implemented requirements against one
 // catalog or profile (the source).
 type ControlImplementation struct {
-	UUID                    string                           `json:"uuid"`
-	Source                  string                           `json:"source"`
-	Description             string                           `json:"description"`
-	Props                   []Property                       `json:"props,omitempty"`
-	Links                   []Link                           `json:"links,omitempty"`
-	SetParameters           []SetParameter                   `json:"set-parameters,omitempty"`
+	UUID                    string                            `json:"uuid"`
+	Source                  string                            `json:"source"`
+	Description             string                            `json:"description"`
+	Props                   []Property                        `json:"props,omitempty"`
+	Links                   []Link                            `json:"links,omitempty"`
+	SetParameters           []SetParameter                    `json:"set-parameters,omitempty"`
 	ImplementedRequirements []ComponentImplementedRequirement `json:"implemented-requirements"`
 }
 

@@ -143,8 +143,8 @@ type SystemImplementation struct {
 
 // SSPControlImpl is the SSP's control-implementation section.
 type SSPControlImpl struct {
-	Description             string                     `json:"description"`
-	SetParameters           []SetParameter             `json:"set-parameters,omitempty"`
+	Description             string                      `json:"description"`
+	SetParameters           []SetParameter              `json:"set-parameters,omitempty"`
 	ImplementedRequirements []SSPImplementedRequirement `json:"implemented-requirements"`
 }
 
