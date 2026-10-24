@@ -1,0 +1,1059 @@
+{
+  "component-definition": {
+    "uuid": "27871fda-bb7b-4246-90e6-e6c5a74219e2",
+    "metadata": {
+      "title": "Acme Security Policy Library Component Definition",
+      "last-modified": "2026-10-01T00:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.2.3",
+      "roles": [
+        {
+          "id": "ciso",
+          "title": "Ciso"
+        }
+      ]
+    },
+    "components": [
+      {
+        "uuid": "50f9a2c1-ce9b-43ec-9f9c-bc3966dece8c",
+        "type": "policy",
+        "title": "Acme Security Policy Library",
+        "description": "The organization-wide set of security policies and procedures.",
+        "responsible-roles": [
+          {
+            "role-id": "ciso"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "eb862929-83de-4118-94dc-068eb3292708",
+            "source": "../profiles/acme-low-tailored_profile.json",
+            "description": "Acme Security Policy Library implementation of the Acme tailored baseline.",
+            "implemented-requirements": [
+              {
+                "uuid": "f5ff4a29-f8f0-40a0-9c8d-c94785d25576",
+                "control-id": "ac-1",
+                "description": "The Acme AC policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "ac-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "b01df1bf-d195-4c17-b1e1-9beb9ee0330f",
+                "control-id": "at-1",
+                "description": "The Acme AT policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "at-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "at-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "at-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "at-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "at-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "at-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "at-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "at-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "2edb61ac-94fe-40d5-8884-3dfa79fc596b",
+                "control-id": "au-1",
+                "description": "The Acme AU policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "au-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "au-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "au-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "au-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "au-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "au-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "au-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "au-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "b1d97bda-08b8-415a-9c65-d156d0c7b32e",
+                "control-id": "ca-1",
+                "description": "The Acme CA policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "ca-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ca-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ca-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "ca-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "ca-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ca-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "ca-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ca-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "0c775583-6dfb-4f7f-8edd-584504e701c8",
+                "control-id": "cm-1",
+                "description": "The Acme CM policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "cm-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "cm-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "cm-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "cm-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "cm-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "cm-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "cm-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "cm-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "29f40009-6d97-4fa0-b8f6-e4a14acdbe3f",
+                "control-id": "cp-1",
+                "description": "The Acme CP policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "cp-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "cp-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "cp-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "cp-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "cp-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "cp-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "cp-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "cp-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "e618c967-2b3c-436d-8aaf-b45110630fdf",
+                "control-id": "ia-1",
+                "description": "The Acme IA policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "ia-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "de464395-9bd4-473e-9115-a2001933f0fb",
+                "control-id": "ir-1",
+                "description": "The Acme IR policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "ir-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ir-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ir-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "ir-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "ir-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ir-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "ir-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ir-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "d830af20-0540-4a5d-a146-5e7f08753a97",
+                "control-id": "ma-1",
+                "description": "The Acme MA policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "ma-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ma-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ma-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "ma-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "ma-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ma-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "ma-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ma-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "8bad1c35-6c5c-4efa-ab32-2c8cae4287a0",
+                "control-id": "mp-1",
+                "description": "The Acme MP policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "mp-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "mp-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "mp-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "mp-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "mp-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "mp-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "mp-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "mp-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "46d4766a-f0bf-46fe-8e3d-d93e05d3c445",
+                "control-id": "pl-1",
+                "description": "The Acme PL policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "pl-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "pl-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "pl-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "pl-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "pl-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "pl-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "pl-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "pl-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "5257df30-efe4-42b2-91c0-48037d97baa3",
+                "control-id": "ps-1",
+                "description": "The Acme PS policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "ps-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ps-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ps-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "ps-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "ps-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ps-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "ps-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ps-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "b864ab50-8c03-4d91-a093-b8c8a6072485",
+                "control-id": "ra-1",
+                "description": "The Acme RA policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "ra-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ra-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "ra-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "ra-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "ra-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ra-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "ra-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "ra-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "1c61580f-19c2-400f-876a-b009652bf360",
+                "control-id": "sa-1",
+                "description": "The Acme SA policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "sa-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "sa-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "sa-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "sa-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "sa-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "sa-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "sa-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "sa-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "3ce5c7a6-708c-4cda-b4f6-ad26f73f24a9",
+                "control-id": "sc-1",
+                "description": "The Acme SC policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "sc-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "d69b2335-253e-4d30-bbff-589d4e5e74d1",
+                "control-id": "si-1",
+                "description": "The Acme SI policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "si-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "si-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "si-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "si-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "si-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "si-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "si-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "si-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              },
+              {
+                "uuid": "62c7f4a4-fbb5-411b-800a-e22f98855311",
+                "control-id": "sr-1",
+                "description": "The Acme SR policy and procedures are published in the policy library and reviewed by the CISO.",
+                "set-parameters": [
+                  {
+                    "param-id": "sr-01_odp.01",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "sr-01_odp.02",
+                    "values": [
+                      "all workforce members"
+                    ]
+                  },
+                  {
+                    "param-id": "sr-01_odp.03",
+                    "values": [
+                      "organization-level"
+                    ]
+                  },
+                  {
+                    "param-id": "sr-01_odp.04",
+                    "values": [
+                      "Chief Information Security Officer"
+                    ]
+                  },
+                  {
+                    "param-id": "sr-01_odp.05",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "sr-01_odp.06",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  },
+                  {
+                    "param-id": "sr-01_odp.07",
+                    "values": [
+                      "annually"
+                    ]
+                  },
+                  {
+                    "param-id": "sr-01_odp.08",
+                    "values": [
+                      "significant changes or audit findings"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "ciso"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

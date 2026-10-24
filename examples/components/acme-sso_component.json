@@ -1,0 +1,197 @@
+{
+  "component-definition": {
+    "uuid": "a84bfd71-99a3-4af2-b6de-673501f7f5ca",
+    "metadata": {
+      "title": "Acme SSO Identity Provider Component Definition",
+      "last-modified": "2026-10-01T00:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.2.3",
+      "roles": [
+        {
+          "id": "identity-team",
+          "title": "Identity Team"
+        }
+      ]
+    },
+    "components": [
+      {
+        "uuid": "8964b481-8b23-4cb4-983c-64a04b202f42",
+        "type": "software",
+        "title": "Acme SSO Identity Provider",
+        "description": "Central single sign-on service (OIDC/SAML) used for all workforce authentication.",
+        "responsible-roles": [
+          {
+            "role-id": "identity-team"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "a4f69164-0b38-4ba6-826e-86ea1fd486af",
+            "source": "../profiles/acme-low-tailored_profile.json",
+            "description": "Acme SSO Identity Provider implementation of the Acme tailored baseline.",
+            "implemented-requirements": [
+              {
+                "uuid": "f37fe7b9-c6bd-4881-a0bc-3fd70e87a553",
+                "control-id": "ac-2",
+                "description": "Accounts are created, modified, disabled and removed exclusively through the SSO provider's lifecycle workflows driven by HR events.",
+                "set-parameters": [
+                  {
+                    "param-id": "ac-02_odp.01",
+                    "values": [
+                      "manager approval recorded in the HR system"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-02_odp.03",
+                    "values": [
+                      "the identity team"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-02_odp.06",
+                    "values": [
+                      "24 hours"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-02_odp.07",
+                    "values": [
+                      "24 hours"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-02_odp.08",
+                    "values": [
+                      "24 hours"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-02_odp.10",
+                    "values": [
+                      "quarterly"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "identity-team"
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "ac-2_smt.a",
+                    "uuid": "baec8076-0aaf-4a94-ba2d-4f33c3b072e1",
+                    "description": "Account types (workforce, service, break-glass) are defined in the SSO tenant configuration."
+                  },
+                  {
+                    "statement-id": "ac-2_smt.b",
+                    "uuid": "2bef1f6b-80b3-4714-9f97-c413aef2f88a",
+                    "description": "Each application has a named account manager recorded in the SSO application catalog."
+                  },
+                  {
+                    "statement-id": "ac-2_smt.e",
+                    "uuid": "3e113028-f427-42bb-adfa-23e7a2ac704c",
+                    "description": "Account creation requires manager approval captured by the HR-driven provisioning workflow."
+                  },
+                  {
+                    "statement-id": "ac-2_smt.f",
+                    "uuid": "b79bcd23-68bd-4159-bf6b-bb58fc9c2429",
+                    "description": "Joiner/mover/leaver events from HR drive automated provisioning and deprovisioning."
+                  },
+                  {
+                    "statement-id": "ac-2_smt.j",
+                    "uuid": "b1479939-c94b-4f4a-b3b2-9589d819c90f",
+                    "description": "Quarterly access reviews are run in the SSO governance module."
+                  }
+                ]
+              },
+              {
+                "uuid": "aaaa3bc8-075e-4326-9b1e-799df8c4efb3",
+                "control-id": "ia-2",
+                "description": "All workforce users authenticate through the SSO provider with phishing-resistant MFA.",
+                "responsible-roles": [
+                  {
+                    "role-id": "identity-team"
+                  }
+                ]
+              },
+              {
+                "uuid": "24ea816a-38e7-441b-9aae-3beaf019daee",
+                "control-id": "ia-2.1",
+                "description": "MFA is enforced for all privileged accounts via conditional-access policy."
+              },
+              {
+                "uuid": "7bb1ae69-98f2-4fd2-b76c-1fdf21211a73",
+                "control-id": "ia-2.2",
+                "description": "MFA is enforced for all non-privileged accounts via conditional-access policy."
+              },
+              {
+                "uuid": "63808ad7-f4e8-4322-83e8-d9dfd6bf76fe",
+                "control-id": "ac-7",
+                "description": "The SSO provider locks accounts after repeated failures.",
+                "set-parameters": [
+                  {
+                    "param-id": "ac-7_prm_1",
+                    "values": [
+                      "5"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-07_odp.02",
+                    "values": [
+                      "15 minutes"
+                    ]
+                  },
+                  {
+                    "param-id": "ac-07_odp.03",
+                    "values": [
+                      "lock the account or node until released by an administrator"
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "958ad302-d3e3-44b5-be5f-8d205d415f26",
+                "control-id": "ia-5",
+                "description": "Authenticators are managed by the SSO provider: passkeys and hardware keys only, issued after identity proofing.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "partial"
+                  }
+                ],
+                "set-parameters": [
+                  {
+                    "param-id": "ia-05_odp.01",
+                    "values": [
+                      "passwords: never (passwordless); hardware keys: on loss or compromise"
+                    ]
+                  },
+                  {
+                    "param-id": "ia-05_odp.02",
+                    "values": [
+                      "suspected compromise"
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "bcad1974-f7f0-43ee-87c7-259207e1e5a8",
+                "control-id": "ac-11",
+                "description": "Session lock after inactivity is enforced by managed-device policy pushed from the SSO provider.",
+                "set-parameters": [
+                  {
+                    "param-id": "ac-11_odp.01",
+                    "values": [
+                      "initiating a device lock after {{ insert: param, ac-11_odp.02 }} of inactivity"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

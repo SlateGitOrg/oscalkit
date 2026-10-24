@@ -47,7 +47,8 @@ func paramsByID(cat *oscal.Catalog, id string) []*oscal.Parameter {
 }
 
 // setParameter applies one set-parameter directive. Scalar-like members
-// (class, depends-on, label, usage, values, select) replace the target's;
+// (class, depends-on, label, usage, values, select) replace the target's
+// (values and select replace each other);
 // props, links, constraints and guidelines are appended, with a prop that
 // carries a uuid replacing any existing prop with that uuid.
 func (r *resolver) setParameter(cat *oscal.Catalog, sp oscal.ProfileSetParameter) {
@@ -69,13 +70,18 @@ func (r *resolver) setParameter(cat *oscal.Catalog, sp oscal.ProfileSetParameter
 		if sp.Usage != "" {
 			t.Usage = sp.Usage
 		}
+		// OSCAL allows a parameter to carry values or a selection, not
+		// both, so setting one replaces the other: values set on a
+		// selection parameter are the selected choices.
 		if sp.Values != nil {
 			t.Values = slices.Clone(sp.Values)
+			t.Select = nil
 		}
 		if sp.Select != nil {
 			sel := *sp.Select
 			sel.Choice = slices.Clone(sel.Choice)
 			t.Select = &sel
+			t.Values = nil
 		}
 		for _, p := range sp.Props {
 			if p.UUID != "" {

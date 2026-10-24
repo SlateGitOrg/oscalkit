@@ -490,12 +490,17 @@ func partIDs(ctl *oscal.Control) map[string]bool {
 	return ids
 }
 
+// paramLabel describes a parameter for gap messages: its label, or for a
+// selection parameter the rendered choices.
 func paramLabel(r *param.Renderer, id string) string {
 	p, ok := r.Param(id)
-	if !ok || p.Label == "" {
-		return "no label"
+	if !ok {
+		return "unknown"
 	}
-	return r.Render(p.Label)
+	if p.Label != "" {
+		return r.Render(p.Label)
+	}
+	return r.Text(id)
 }
 
 // family names the control's top-level group, or the id prefix before "-".

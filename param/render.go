@@ -122,7 +122,8 @@ func (r *Renderer) aggregated(id string) []string {
 }
 
 // Text returns the substitution text for one parameter:
-//   - its effective values, comma separated;
+//   - its effective values (with any inserts inside them substituted),
+//     comma separated;
 //   - otherwise, for an aggregating parameter whose parts are all set, the
 //     rendered parts joined by "; ";
 //   - otherwise a selection "[Selection (one or more): a; b]";
@@ -136,7 +137,12 @@ func (r *Renderer) text(id string, depth int) string {
 		return "[...]"
 	}
 	if v := r.Values(id); len(v) > 0 {
-		return strings.Join(v, ", ")
+		// A value may be a selection choice that itself contains inserts.
+		out := make([]string, len(v))
+		for i, s := range v {
+			out[i] = r.render(s, depth+1)
+		}
+		return strings.Join(out, ", ")
 	}
 	p, ok := r.Param(id)
 	if !ok {

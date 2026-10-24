@@ -1,0 +1,128 @@
+{
+  "profile": {
+    "uuid": "8b4486c5-99cb-481b-aeb5-8eea34854702",
+    "metadata": {
+      "title": "Acme Cloud LOW+ Tailored Baseline",
+      "last-modified": "2026-10-01T00:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.2.3"
+    },
+    "imports": [
+      {
+        "href": "../../testdata/oscal-content/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_LOW-baseline_profile.json",
+        "include-all": {},
+        "exclude-controls": [
+          {
+            "matching": [
+              {
+                "pattern": "pe-*",
+                "remarks": "Physical and environmental protection is inherited from the hosting provider."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "href": "#a8d42934-33e7-48a0-a81f-9b0cbf4e7af6",
+        "include-controls": [
+          {
+            "with-ids": [
+              "ac-6",
+              "ac-11",
+              "sc-8",
+              "sc-28"
+            ]
+          }
+        ]
+      }
+    ],
+    "merge": {
+      "combine": {
+        "method": "use-first"
+      },
+      "as-is": true
+    },
+    "modify": {
+      "set-parameters": [
+        {
+          "param-id": "ac-01_odp.05",
+          "values": [
+            "at least annually"
+          ]
+        },
+        {
+          "param-id": "ac-01_odp.07",
+          "values": [
+            "at least annually"
+          ]
+        },
+        {
+          "param-id": "ac-11_odp.02",
+          "values": [
+            "15 minutes"
+          ]
+        },
+        {
+          "param-id": "sc-08_odp",
+          "values": [
+            "confidentiality",
+            "integrity"
+          ]
+        }
+      ],
+      "alters": [
+        {
+          "control-id": "ac-2",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "ac-2_acme-guidance",
+                  "name": "guidance",
+                  "ns": "https://acme.example/ns/oscal",
+                  "prose": "Acme requires all workforce accounts to be provisioned through the SSO identity provider; local accounts are prohibited."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ac-11",
+          "removes": [
+            {
+              "by-name": "implementation-level",
+              "by-ns": "http://csrc.nist.gov/ns/rmf"
+            }
+          ],
+          "adds": [
+            {
+              "position": "starting",
+              "props": [
+                {
+                  "name": "tailored",
+                  "ns": "https://acme.example/ns/oscal",
+                  "value": "added-from-moderate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "back-matter": {
+      "resources": [
+        {
+          "uuid": "a8d42934-33e7-48a0-a81f-9b0cbf4e7af6",
+          "description": "NIST SP 800-53 rev5 catalog (pinned copy)",
+          "rlinks": [
+            {
+              "href": "../../testdata/oscal-content/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+              "media-type": "application/oscal.catalog+json"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

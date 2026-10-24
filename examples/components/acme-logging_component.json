@@ -1,0 +1,157 @@
+{
+  "component-definition": {
+    "uuid": "68411bdf-1aab-4163-93a8-85ad8b2f225b",
+    "metadata": {
+      "title": "Acme Central Log Pipeline Component Definition",
+      "last-modified": "2026-10-01T00:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.2.3",
+      "roles": [
+        {
+          "id": "security-operations",
+          "title": "Security Operations"
+        }
+      ]
+    },
+    "components": [
+      {
+        "uuid": "fdc0781d-c7f9-4e44-989e-7d805eb63a34",
+        "type": "service",
+        "title": "Acme Central Log Pipeline",
+        "description": "Managed log collection, retention and alerting pipeline for all production workloads.",
+        "responsible-roles": [
+          {
+            "role-id": "security-operations"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "dab653c8-1730-49f8-a9c5-36b1fd8d46c5",
+            "source": "../profiles/acme-low-tailored_profile.json",
+            "description": "Acme Central Log Pipeline implementation of the Acme tailored baseline.",
+            "implemented-requirements": [
+              {
+                "uuid": "51b62296-d0e1-4010-9049-1a5c8fa5c61f",
+                "control-id": "au-2",
+                "description": "All production services emit security events (authentication, authorization failures, admin actions) to the pipeline.",
+                "set-parameters": [
+                  {
+                    "param-id": "au-02_odp.01",
+                    "values": [
+                      "authentication, authorization failures, administrative actions, data exports"
+                    ]
+                  },
+                  {
+                    "param-id": "au-02_odp.02",
+                    "values": [
+                      "authentication and administrative actions"
+                    ]
+                  },
+                  {
+                    "param-id": "au-02_odp.03",
+                    "values": [
+                      "continuously"
+                    ]
+                  },
+                  {
+                    "param-id": "au-02_odp.04",
+                    "values": [
+                      "annually"
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "6e984de3-6c67-4bf5-aa84-daacd9e44c7a",
+                "control-id": "au-3",
+                "description": "Events use a common schema carrying timestamp, source, outcome, subject and object identifiers."
+              },
+              {
+                "uuid": "0e635a19-3363-454d-b16d-7bf1d8eb6c8a",
+                "control-id": "au-4",
+                "description": "Storage auto-scales; retention tiers move data to archive storage.",
+                "set-parameters": [
+                  {
+                    "param-id": "au-04_odp",
+                    "values": [
+                      "one year online, seven years archived"
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "32873e81-4023-4db3-b373-82cce181f9e5",
+                "control-id": "au-5",
+                "description": "Pipeline ingestion failures page the on-call engineer.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "planned"
+                  }
+                ]
+              },
+              {
+                "uuid": "ddede5f4-6262-4715-9fcd-964af0939a0b",
+                "control-id": "au-6",
+                "description": "Detections run continuously; weekly triage of anomalies by security operations.",
+                "set-parameters": [
+                  {
+                    "param-id": "au-06_odp.01",
+                    "values": [
+                      "weekly"
+                    ]
+                  },
+                  {
+                    "param-id": "au-06_odp.02",
+                    "values": [
+                      "anomalous authentication and data access"
+                    ]
+                  },
+                  {
+                    "param-id": "au-06_odp.03",
+                    "values": [
+                      "the security operations lead"
+                    ]
+                  }
+                ],
+                "responsible-roles": [
+                  {
+                    "role-id": "security-operations"
+                  }
+                ]
+              },
+              {
+                "uuid": "27eef2ff-84b0-4fc5-9b6c-8e136d9588b9",
+                "control-id": "au-8",
+                "description": "Hosts synchronize to authoritative NTP sources; events are stored in UTC."
+              },
+              {
+                "uuid": "203646e0-132c-4c5d-9973-fe3a0f152c71",
+                "control-id": "au-9",
+                "description": "Log storage is write-once; access is limited to the security operations role."
+              },
+              {
+                "uuid": "c77705e0-b6ce-4f93-8c74-a05b8b81086d",
+                "control-id": "au-11",
+                "description": "Records are retained per the retention schedule.",
+                "set-parameters": [
+                  {
+                    "param-id": "au-11_odp",
+                    "values": [
+                      "seven years"
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "37d1b3a4-6820-471c-8c08-e4b40b74a7ce",
+                "control-id": "au-12",
+                "description": "Collection agents are deployed by the base image on every host."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

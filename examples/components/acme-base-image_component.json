@@ -1,0 +1,117 @@
+{
+  "component-definition": {
+    "uuid": "02165d6f-914d-4152-a6e5-59740b49560a",
+    "metadata": {
+      "title": "Acme Hardened Linux Base Image Component Definition",
+      "last-modified": "2026-10-01T00:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.2.3",
+      "roles": [
+        {
+          "id": "platform-engineering",
+          "title": "Platform Engineering"
+        }
+      ]
+    },
+    "components": [
+      {
+        "uuid": "9a615bb8-783c-4853-856f-3e9458ff5da2",
+        "type": "software",
+        "title": "Acme Hardened Linux Base Image",
+        "description": "CIS-benchmarked Linux image used for all compute instances.",
+        "responsible-roles": [
+          {
+            "role-id": "platform-engineering"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "f76c2450-0844-4799-b604-135363dbb78a",
+            "source": "../profiles/acme-low-tailored_profile.json",
+            "description": "Acme Hardened Linux Base Image implementation of the Acme tailored baseline.",
+            "implemented-requirements": [
+              {
+                "uuid": "6ba44238-f135-42e0-8b86-cadfc8a3326a",
+                "control-id": "cm-2",
+                "description": "The image is defined as code and versioned; every instance launches from an approved image version."
+              },
+              {
+                "uuid": "13281111-94df-4774-b516-8e5eb4db8e74",
+                "control-id": "cm-6",
+                "description": "CIS Level 1 settings are applied at build time and drift is detected daily.",
+                "set-parameters": [
+                  {
+                    "param-id": "cm-06_odp.01",
+                    "values": [
+                      "CIS Benchmark Level 1"
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "aceb2aaa-18a4-40d2-9a2f-92c70a5fc815",
+                "control-id": "cm-7",
+                "description": "Unneeded services and packages are removed at build time."
+              },
+              {
+                "uuid": "f60f4660-14ec-4798-8b14-e3e43d5b5b26",
+                "control-id": "si-2",
+                "description": "Images are rebuilt weekly with current patches; critical patches are applied within the SLA.",
+                "set-parameters": [
+                  {
+                    "param-id": "si-02_odp",
+                    "values": [
+                      "14 days for critical, 30 days for high"
+                    ]
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "si-2_smt.a",
+                    "uuid": "46c69697-f595-42e3-adc0-643c223fc545",
+                    "description": "Vulnerability scans of each image identify flaws before promotion."
+                  },
+                  {
+                    "statement-id": "si-2_smt.c",
+                    "uuid": "cebab812-e827-486c-a165-0b1059117d24",
+                    "description": "Patched images are promoted after automated tests."
+                  }
+                ]
+              },
+              {
+                "uuid": "f58cf4ff-c680-4b9f-9ae3-c19dc2c61574",
+                "control-id": "si-3",
+                "description": "An endpoint protection agent is baked into the image.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "partial"
+                  }
+                ]
+              },
+              {
+                "uuid": "6fae5523-b2aa-4460-ae93-bad2e9b11f69",
+                "control-id": "sc-28",
+                "description": "Disks are encrypted with platform-managed keys.",
+                "set-parameters": [
+                  {
+                    "param-id": "sc-28_odp.01",
+                    "values": [
+                      "confidentiality"
+                    ]
+                  },
+                  {
+                    "param-id": "sc-28_odp.02",
+                    "values": [
+                      "all data volumes"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
