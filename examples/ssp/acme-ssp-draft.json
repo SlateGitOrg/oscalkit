@@ -1,0 +1,253 @@
+{
+  "system-security-plan": {
+    "uuid": "aeb3b5dc-c4e1-435d-b4a7-b314a6565eb3",
+    "metadata": {
+      "title": "Acme Customer Portal SSP (hand-edited draft)",
+      "last-modified": "2026-10-01T00:00:00Z",
+      "version": "0.3-draft",
+      "oscal-version": "1.2.3",
+      "roles": [
+        {
+          "id": "system-owner",
+          "title": "System Owner"
+        }
+      ]
+    },
+    "import-profile": {
+      "href": "../profiles/acme-low-tailored_profile.json"
+    },
+    "system-characteristics": {
+      "system-ids": [
+        {
+          "identifier-type": "http://ietf.org/rfc/rfc4122",
+          "id": "3260df0e-2dfe-4dc3-ae3e-0deae3e9a927"
+        }
+      ],
+      "system-name": "Acme Customer Portal",
+      "description": "Customer-facing web portal for order tracking.",
+      "system-information": {
+        "information-types": [
+          {
+            "uuid": "8c675623-13a4-4a97-9a44-6b2931710be7",
+            "title": "Customer order records",
+            "description": "Order history and shipping addresses."
+          }
+        ]
+      },
+      "status": {
+        "state": "under-development"
+      },
+      "authorization-boundary": {
+        "description": "The portal web tier, API tier and managed database."
+      }
+    },
+    "system-implementation": {
+      "components": [
+        {
+          "uuid": "543d8c1d-4b89-4926-a30d-6441ce634518",
+          "type": "this-system",
+          "title": "Acme Customer Portal",
+          "description": "The system as a whole.",
+          "status": {
+            "state": "under-development"
+          }
+        },
+        {
+          "uuid": "58e43b3f-e54e-4529-9e84-5a0d4ae4f9a5",
+          "type": "software",
+          "title": "Acme SSO Identity Provider",
+          "description": "Workforce SSO.",
+          "status": {
+            "state": "operational"
+          }
+        }
+      ]
+    },
+    "control-implementation": {
+      "description": "Draft written by hand; deliberately incomplete to exercise validation and gap analysis.",
+      "implemented-requirements": [
+        {
+          "uuid": "bac447e3-b40c-4349-839e-6f8c224cf419",
+          "control-id": "ac-1",
+          "set-parameters": [
+            {
+              "param-id": "ac-01_odp.01",
+              "values": [
+                "all staff"
+              ]
+            },
+            {
+              "param-id": "ac-01_odp.02",
+              "values": [
+                "all staff"
+              ]
+            },
+            {
+              "param-id": "ac-01_odp.03",
+              "values": [
+                "organization-level"
+              ]
+            },
+            {
+              "param-id": "ac-01_odp.04",
+              "values": [
+                "the CISO"
+              ]
+            },
+            {
+              "param-id": "ac-01_odp.05",
+              "values": [
+                "annually"
+              ]
+            },
+            {
+              "param-id": "ac-01_odp.06",
+              "values": [
+                "major changes"
+              ]
+            },
+            {
+              "param-id": "ac-01_odp.07",
+              "values": [
+                "annually"
+              ]
+            },
+            {
+              "param-id": "ac-01_odp.08",
+              "values": [
+                "major changes"
+              ]
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "543d8c1d-4b89-4926-a30d-6441ce634518",
+              "uuid": "81819e36-6961-448c-a896-923bc5245e87",
+              "description": "The access control policy is published and reviewed annually.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "2abe8162-c624-46d4-87bb-fcbe45fa28d5",
+          "control-id": "ac-2",
+          "statements": [
+            {
+              "statement-id": "ac-2_smt.a",
+              "uuid": "467fb3e5-753f-497a-9c5b-0fcc3a35773b",
+              "by-components": [
+                {
+                  "component-uuid": "58e43b3f-e54e-4529-9e84-5a0d4ae4f9a5",
+                  "uuid": "8764fbab-1a19-4ed4-a6e9-6c247e3cb036",
+                  "description": "Account types are defined in the SSO tenant.",
+                  "implementation-status": {
+                    "state": "implemented"
+                  }
+                }
+              ]
+            },
+            {
+              "statement-id": "ac-2_smt.z",
+              "uuid": "bc236f1b-f1af-41f9-a687-c930a215eb7e",
+              "by-components": [
+                {
+                  "component-uuid": "58e43b3f-e54e-4529-9e84-5a0d4ae4f9a5",
+                  "uuid": "dd9e2ace-fe44-46e4-b95d-1aadd328f14b",
+                  "description": "Typo: there is no item z.",
+                  "implementation-status": {
+                    "state": "implemented"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "uuid": "9c73eba7-9e6f-4276-91b3-b351c5851aa5",
+          "control-id": "ac-7",
+          "by-components": [
+            {
+              "component-uuid": "5837e974-01b9-4543-9738-a09475dd6106",
+              "uuid": "347c2a11-0550-4a19-9ced-c075a313620f",
+              "description": "Lockout is enforced by a component that is not listed in system-implementation.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "3193c011-013a-4306-ae2b-2b70d59d2be9",
+          "control-id": "ac-8",
+          "by-components": [
+            {
+              "component-uuid": "543d8c1d-4b89-4926-a30d-6441ce634518",
+              "uuid": "7eb615a2-6ca9-4387-af76-048cfc8fa8fb",
+              "description": "[Placeholder]",
+              "implementation-status": {
+                "state": "not-applicable"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "2cda7d43-8898-43a6-8f16-743116e699aa",
+          "control-id": "ia-2",
+          "responsible-roles": [
+            {
+              "role-id": "identity-admin"
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "58e43b3f-e54e-4529-9e84-5a0d4ae4f9a5",
+              "uuid": "0af8a340-4b71-481b-84fe-6768377836a4",
+              "description": "All users authenticate with MFA through SSO.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "b7b2c335-857f-4a59-a9d2-c8cd62d7c42d",
+          "control-id": "au-2",
+          "set-parameters": [
+            {
+              "param-id": "au-2_prm_99",
+              "values": [
+                "login events"
+              ]
+            }
+          ],
+          "by-components": [
+            {
+              "component-uuid": "543d8c1d-4b89-4926-a30d-6441ce634518",
+              "uuid": "425fdd8d-ac0e-4815-968c-cc1e5d1a8f1e",
+              "description": "Security events are logged.",
+              "implementation-status": {
+                "state": "partial"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "6a5d04f9-987c-442b-987b-8668798cb419",
+          "control-id": "pe-2",
+          "by-components": [
+            {
+              "component-uuid": "543d8c1d-4b89-4926-a30d-6441ce634518",
+              "uuid": "62fe2eed-0f80-42a6-addd-0f4adc1475f7",
+              "description": "Badge readers at the office.",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

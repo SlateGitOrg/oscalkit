@@ -13,7 +13,7 @@ func TestFindInserts(t *testing.T) {
 	if len(ins) != 3 || ins[0].IDRef != "p-1" || ins[1].IDRef != "p.2" || ins[2].Type != "other" {
 		t.Fatalf("inserts = %+v", ins)
 	}
-	if got := ParamRefs(text); strings.Join(got, ",") != "p-1,p.2" {
+	if got := Refs(text); strings.Join(got, ",") != "p-1,p.2" {
 		t.Fatalf("refs = %v", got)
 	}
 	if FindInserts("plain") != nil {
@@ -131,7 +131,7 @@ func FuzzRender(f *testing.F) {
 	r := NewRenderer(testCatalog())
 	f.Fuzz(func(t *testing.T, s string) {
 		out := r.Render(s)
-		if len(ParamRefs(s)) == 0 && out != s {
+		if len(Refs(s)) == 0 && out != s {
 			t.Fatalf("render changed text without param inserts: %q -> %q", s, out)
 		}
 	})

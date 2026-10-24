@@ -129,7 +129,7 @@ func (s *refSet) scan(v any) {
 			s.fragments[text[i+1:j]] = true
 		}
 	}
-	for _, id := range param.ParamRefs(text) {
+	for _, id := range param.Refs(text) {
 		s.params[id] = true
 	}
 	s.scanAggregates(v)
@@ -138,8 +138,7 @@ func (s *refSet) scan(v any) {
 // scanAggregates records params named by "aggregates" props (SP 800-53
 // uses these to tie a summary param to its organization-defined parts).
 func (s *refSet) scanAggregates(v any) {
-	var visit func(ps []oscal.Parameter)
-	visit = func(ps []oscal.Parameter) {
+	visit := func(ps []oscal.Parameter) {
 		for _, p := range ps {
 			for _, pr := range p.Props {
 				if pr.Name == "aggregates" {

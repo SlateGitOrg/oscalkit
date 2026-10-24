@@ -100,4 +100,3 @@ func relativeHref(out, target string) string {
 	}
 	return filepath.ToSlash(rel)
 }
-

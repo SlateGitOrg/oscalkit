@@ -37,9 +37,9 @@ func FindInserts(text string) []Insert {
 	return out
 }
 
-// ParamRefs returns the ids of all parameters referenced by insert
+// Refs returns the ids of all parameters referenced by insert
 // directives in text, in order of appearance (duplicates retained).
-func ParamRefs(text string) []string {
+func Refs(text string) []string {
 	var ids []string
 	for _, in := range FindInserts(text) {
 		if in.Type == "param" {

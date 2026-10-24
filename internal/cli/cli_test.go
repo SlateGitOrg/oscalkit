@@ -273,3 +273,46 @@ func TestRunEntryPoint(t *testing.T) {
 		t.Fatal(m.String())
 	}
 }
+
+// TestExampleDraftSSP pins the findings the demo shows for the deliberately
+// flawed hand-edited SSP.
+func TestExampleDraftSSP(t *testing.T) {
+	draft := "../../examples/ssp/acme-ssp-draft.json"
+	out, _, code := runCLI(t, "validate", draft)
+	if code != ExitFindings || !strings.Contains(out, "2 semantic errors") || !strings.Contains(out, "unknown-component") || !strings.Contains(out, "unknown-role") {
+		t.Fatalf("validate draft: %d\n%s", code, out)
+	}
+	out, _, code = runCLI(t, "gaps", "--format", "json", draft)
+	if code != ExitFindings {
+		t.Fatalf("gaps draft must fail on errors, got %d", code)
+	}
+	var rep struct {
+		Summary struct {
+			BaselineControls int `json:"baseline-controls"`
+			Addressed        int `json:"addressed"`
+			Satisfied        int `json:"satisfied"`
+		} `json:"summary"`
+		Gaps []struct {
+			ControlID string `json:"control-id"`
+			Kind      string `json:"kind"`
+		} `json:"gaps"`
+	}
+	if err := json.Unmarshal([]byte(out), &rep); err != nil {
+		t.Fatal(err)
+	}
+	if rep.Summary.BaselineControls != 143 || rep.Summary.Addressed != 6 || rep.Summary.Satisfied != 2 {
+		t.Fatalf("summary = %+v", rep.Summary)
+	}
+	want := map[string]string{"ac-2": "unknown-statement", "ac-7": "unknown-component", "ac-8": "not-applicable-unjustified", "au-2": "unknown-parameter", "pe-2": "not-in-baseline", "ac-3": "missing-control"}
+	for ctl, kind := range want {
+		found := false
+		for _, g := range rep.Gaps {
+			if g.ControlID == ctl && g.Kind == kind {
+				found = true
+			}
+		}
+		if !found {
+			t.Errorf("missing %s gap for %s", kind, ctl)
+		}
+	}
+}

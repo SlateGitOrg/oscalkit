@@ -69,7 +69,7 @@ func readCapped(path string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	return io.ReadAll(io.LimitReader(f, oscal.MaxDocumentBytes+1))
 }
 
@@ -86,7 +86,7 @@ func (f FileFetcher) fetchHTTP(ctx context.Context, uri string) ([]byte, error) 
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("GET %s: %s", uri, resp.Status)
 	}

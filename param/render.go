@@ -240,7 +240,7 @@ func StatementRefs(c *oscal.Control) []string {
 	var ids []string
 	var walk func(p *oscal.Part)
 	walk = func(p *oscal.Part) {
-		for _, id := range ParamRefs(p.Prose) {
+		for _, id := range Refs(p.Prose) {
 			if !slices.Contains(ids, id) {
 				ids = append(ids, id)
 			}

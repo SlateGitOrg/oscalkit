@@ -207,7 +207,7 @@ func (c *checker) catalog(cat *oscal.Catalog, g genericInfo) {
 	params := map[string]bool{}
 	var inserts []fragmentRef
 	scanText := func(text, path string) {
-		for _, id := range param.ParamRefs(text) {
+		for _, id := range param.Refs(text) {
 			inserts = append(inserts, fragmentRef{target: id, path: path})
 		}
 	}

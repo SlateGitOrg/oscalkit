@@ -146,7 +146,7 @@ func TestGenerateDiagnostics(t *testing.T) {
 				ImplementedRequirements: []oscal.ComponentImplementedRequirement{
 					{UUID: uuid, ControlID: "x-1", Description: title + " does x-1",
 						SetParameters: []oscal.SetParameter{{ParamID: "x-1_p", Values: []string{value}}, {ParamID: "bogus", Values: []string{"v"}}},
-						Statements: []oscal.ComponentStatement{{StatementID: "x-1_smt.a", UUID: uuid, Description: "a"}, {StatementID: "x-1_smt.zz", UUID: uuid, Description: "?"}}},
+						Statements:    []oscal.ComponentStatement{{StatementID: "x-1_smt.a", UUID: uuid, Description: "a"}, {StatementID: "x-1_smt.zz", UUID: uuid, Description: "?"}}},
 					{UUID: uuid, ControlID: "y-9", Description: "not in baseline"},
 				}}}}
 	}

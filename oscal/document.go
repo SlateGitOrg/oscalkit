@@ -78,7 +78,7 @@ func ReadFile(path string) (*Document, error) {
 	if err != nil {
 		return nil, fmt.Errorf("oscal: %w", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	data, err := io.ReadAll(io.LimitReader(f, MaxDocumentBytes+1))
 	if err != nil {
 		return nil, fmt.Errorf("oscal: read %s: %w", path, err)
@@ -119,7 +119,7 @@ func Normalize(data []byte, name string) ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("oscal: gunzip %s: %w", displayName(name), err)
 		}
-		defer zr.Close()
+		defer func() { _ = zr.Close() }()
 		data, err = io.ReadAll(io.LimitReader(zr, MaxDocumentBytes+1))
 		if err != nil {
 			return nil, fmt.Errorf("oscal: gunzip %s: %w", displayName(name), err)

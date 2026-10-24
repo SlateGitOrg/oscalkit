@@ -139,7 +139,8 @@ func TestUUIDGenerators(t *testing.T) {
 		t.Fatalf("random uuids: %s %s", a, b)
 	}
 	d := DeterministicUUIDs{Seed: "s"}
-	if d.New("k") != d.New("k") || d.New("k") == d.New("k2") || !v5.MatchString(d.New("k")) {
+	k1, k2, other := d.New("k"), d.New("k"), d.New("k2")
+	if k1 != k2 || k1 == other || !v5.MatchString(k1) {
 		t.Fatal("deterministic uuids must be stable, distinct per key and v5")
 	}
 	if (DeterministicUUIDs{Seed: "other"}).New("k") == d.New("k") {
@@ -149,7 +150,7 @@ func TestUUIDGenerators(t *testing.T) {
 
 func testCatalog() *Catalog {
 	return &Catalog{
-		Params: []Parameter{{ID: "loose"}},
+		Params:   []Parameter{{ID: "loose"}},
 		Controls: []Control{{ID: "x-1", Title: "X1", Props: []Property{{Name: "label", Class: "zero", Value: "X-01"}, {Name: "label", Value: "X-1"}}}},
 		Groups: []Group{{ID: "g", Params: []Parameter{{ID: "gp"}}, Controls: []Control{
 			{ID: "g-1", Params: []Parameter{{ID: "g-1_p"}}, Parts: []Part{{Name: "statement", ID: "g-1_smt"}},
