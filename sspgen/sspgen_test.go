@@ -209,7 +209,141 @@ func TestGenerateOptionErrors(t *testing.T) {
 	if titleFromID("system-owner_x") != "System Owner X" || titleFromID("--") != "--" {
 		t.Fatal("titleFromID")
 	}
+	if rankOf("mostly-done") <= rankOf("planned") || rankOf("implemented") >= rankOf("partial") {
+		t.Fatal("unknown states rank as least complete")
+	}
 	if (Diagnostic{Code: "c", Message: "m"}).String() != "c: m" {
 		t.Fatal("diagnostic string")
+	}
+}
+
+// A component that claims the same controls in two control-implementations
+// (e.g. one per baseline revision) must still give a valid SSP: one
+// by-component per (control, component), with unique uuids.
+func TestGenerateMergesRepeatedControlImplementations(t *testing.T) {
+	cat, _ := acmeInputs(t)
+	doc, err := oscal.ReadFile(filepath.Join(examples, "components", "acme-sso_component.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	again, err := oscal.ReadFile(filepath.Join(examples, "components", "acme-sso_component.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	comp := &doc.ComponentDefinition.Components[0]
+	second := again.ComponentDefinition.Components[0].ControlImplementations[0]
+	second.UUID = "bbbbbbbb-0000-4000-8000-000000000002"
+	second.Source = "https://example.org/NIST_SP-800-53_rev5_LOW-baseline_profile.json"
+	for i := range second.ImplementedRequirements {
+		ir := &second.ImplementedRequirements[i]
+		if ir.ControlID == "ac-2" {
+			ir.Description = "A second, revision-specific narrative."
+			ir.Props = append(ir.Props, oscal.Property{Name: "implementation-status", Value: "partial"})
+			ir.SetParameters = append(ir.SetParameters[:0:0], oscal.SetParameter{ParamID: "ac-02_odp.01", Values: []string{"a different value"}})
+			ir.ResponsibleRoles = append(ir.ResponsibleRoles, oscal.ResponsibleRole{RoleID: "security-officer"})
+		}
+	}
+	comp.ControlImplementations = append(comp.ControlImplementations, second)
+
+	res, err := Generate(cat, []*oscal.ComponentDefinition{doc.ComponentDefinition}, fixedOpts())
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, err := oscal.Marshal(oscal.Document{SSP: res.SSP})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if vs, err := schema.Validate(schema.SSP, data); err != nil || len(vs) != 0 {
+		t.Fatalf("not schema-valid: %v %v", vs, err)
+	}
+	decoded, err := oscal.Decode(data, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if fs := check.Document(decoded); check.Errors(fs) != 0 {
+		t.Fatalf("semantic errors (duplicate uuids?): %v", fs)
+	}
+	var codes []string
+	for _, d := range res.Diagnostics {
+		codes = append(codes, d.Code)
+	}
+	for _, want := range []string{"merged-implementations", "conflicting-status", "conflicting-param"} {
+		if !slices.Contains(codes, want) {
+			t.Errorf("missing %s in %v", want, codes)
+		}
+	}
+	if res.Stats.Covered != 7 {
+		t.Fatalf("covered = %d, want 7", res.Stats.Covered)
+	}
+	for _, ir := range res.SSP.ControlImplementation.ImplementedRequirements {
+		if len(ir.ByComponents) != 1 {
+			t.Fatalf("%s: %d by-components, want one per component", ir.ControlID, len(ir.ByComponents))
+		}
+		for _, st := range ir.Statements {
+			if len(st.ByComponents) != 1 {
+				t.Fatalf("%s: %d by-components, want one per component", st.StatementID, len(st.ByComponents))
+			}
+		}
+		if ir.ControlID != "ac-2" {
+			continue
+		}
+		bc := ir.ByComponents[0]
+		if !strings.HasSuffix(bc.Description, "\n\nA second, revision-specific narrative.") || strings.Count(bc.Description, "\n\n") != 1 {
+			t.Errorf("descriptions are joined, distinct ones only: %q", bc.Description)
+		}
+		if bc.ImplementationStatus.State != "partial" {
+			t.Errorf("the least complete status wins, got %q", bc.ImplementationStatus.State)
+		}
+		if len(bc.ResponsibleRoles) != 2 {
+			t.Errorf("roles are unioned by id: %+v", bc.ResponsibleRoles)
+		}
+		for _, sp := range ir.SetParameters {
+			if sp.ParamID == "ac-02_odp.01" && sp.Values[0] == "a different value" {
+				t.Error("the first claim's parameter value wins")
+			}
+		}
+		if ir.Statements[0].ByComponents[0].ImplementationStatus.State != "partial" {
+			t.Error("statement status defaults to the merged requirement's status")
+		}
+	}
+	// Identical duplicate claims (the same control-implementation twice)
+	// merge silently apart from the merged-implementations notice.
+	dup := *doc.ComponentDefinition
+	dup.Components = slices.Clone(dup.Components)
+	dup.Components[0].ControlImplementations = []oscal.ControlImplementation{comp.ControlImplementations[0], comp.ControlImplementations[0]}
+	res, err = Generate(cat, []*oscal.ComponentDefinition{&dup}, fixedOpts())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, d := range res.Diagnostics {
+		if d.Code != "merged-implementations" && d.Code != "unknown-param" {
+			t.Errorf("unexpected diagnostic for identical claims: %s", d)
+		}
+	}
+}
+
+// The same component passed three times still gets three distinct
+// system-component uuids under a deterministic generator.
+func TestGenerateRepeatedComponentGetsFreshUUIDs(t *testing.T) {
+	cat, cds := acmeInputs(t)
+	sso := cds[len(cds)-1]
+	res, err := Generate(cat, []*oscal.ComponentDefinition{sso, sso, sso}, fixedOpts())
+	if err != nil {
+		t.Fatal(err)
+	}
+	seen := map[string]bool{}
+	for _, c := range res.SSP.SystemImplementation.Components {
+		if seen[c.UUID] {
+			t.Fatalf("duplicate system-component uuid %s", c.UUID)
+		}
+		seen[c.UUID] = true
+	}
+	data, _ := oscal.Marshal(oscal.Document{SSP: res.SSP})
+	decoded, err := oscal.Decode(data, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if fs := check.Document(decoded); check.Errors(fs) != 0 {
+		t.Fatalf("semantic errors: %v", fs)
 	}
 }

@@ -64,12 +64,23 @@ type Result struct {
 	Stats       Stats
 }
 
-// contribution is one component's implementation of one control.
+// contribution is one component's implementation of one control. A
+// component can claim the same control in several control-implementations
+// (for example one per baseline revision); all of its claims are merged
+// into a single contribution, so that the SSP carries one by-component per
+// (control, component) pair.
 type contribution struct {
 	componentUUID string
 	componentName string
-	ir            oscal.ComponentImplementedRequirement
-	ciParams      []oscal.SetParameter
+	claims        []claim
+}
+
+// claim is one implemented-requirement of a component for a control, with
+// the set-parameters of its enclosing control-implementation.
+type claim struct {
+	ir       oscal.ComponentImplementedRequirement
+	ciParams []oscal.SetParameter
+	source   string
 }
 
 type generator struct {
@@ -134,6 +145,7 @@ func (g *generator) run(cds []*oscal.ComponentDefinition) (*Result, error) {
 	}
 
 	byControl := map[string][]contribution{}
+	contribIdx := map[string]int{} // control id + NUL + component uuid → index in byControl
 	baselineIdx := g.baseline.ControlIndex()
 	usedUUIDs := map[string]bool{thisSystem.UUID: true}
 	for _, cd := range cds {
@@ -141,7 +153,12 @@ func (g *generator) run(cds []*oscal.ComponentDefinition) (*Result, error) {
 			uuid := comp.UUID
 			if usedUUIDs[uuid] {
 				g.warn("duplicate-component", "component %q reuses uuid %s; a new uuid was assigned", comp.Title, uuid)
-				uuid = g.opts.UUIDs.New("component:" + comp.UUID + ":" + comp.Title)
+				// The name is deterministic, so repeat it with a counter
+				// until it is fresh (the same component can be passed
+				// more than twice).
+				for n := 0; usedUUIDs[uuid]; n++ {
+					uuid = g.opts.UUIDs.New(fmt.Sprintf("component:%s:%s:%d", comp.UUID, comp.Title, n))
+				}
 			}
 			usedUUIDs[uuid] = true
 			components = append(components, oscal.SystemComponent{
@@ -167,8 +184,15 @@ func (g *generator) run(cds []*oscal.ComponentDefinition) (*Result, error) {
 					for _, st := range ir.Statements {
 						addRoles(st.ResponsibleRoles)
 					}
+					cl := claim{ir: ir, ciParams: ci.SetParameters, source: ci.Source}
+					key := ir.ControlID + "\x00" + uuid
+					if i, ok := contribIdx[key]; ok {
+						byControl[ir.ControlID][i].claims = append(byControl[ir.ControlID][i].claims, cl)
+						continue
+					}
+					contribIdx[key] = len(byControl[ir.ControlID])
 					byControl[ir.ControlID] = append(byControl[ir.ControlID], contribution{
-						componentUUID: uuid, componentName: comp.Title, ir: ir, ciParams: ci.SetParameters,
+						componentUUID: uuid, componentName: comp.Title, claims: []claim{cl},
 					})
 				}
 			}
@@ -246,34 +270,22 @@ func (g *generator) covered(ctl *oscal.Control, contribs []contribution) oscal.S
 	stmtIdx := map[string]int{}
 	partIDs := partIDSet(ctl)
 	for _, c := range contribs {
+		if len(c.claims) > 1 {
+			sources := make([]string, len(c.claims))
+			for i, cl := range c.claims {
+				sources[i] = cl.source
+			}
+			g.warn("merged-implementations", "component %q implements %s in %d requirements (sources %q); they were merged into one by-component",
+				c.componentName, ctl.ID, len(c.claims), sources)
+		}
 		bc := oscal.ByComponent{
 			ComponentUUID:        c.componentUUID,
 			UUID:                 g.opts.UUIDs.New("bc:" + ctl.ID + ":" + c.componentUUID),
-			Description:          c.ir.Description,
-			ImplementationStatus: &oscal.ImplementationStatus{State: statusOf(c.ir.Props)},
-			ResponsibleRoles:     stripParties(c.ir.ResponsibleRoles),
+			Description:          joinDistinct(c.claims, func(cl claim) string { return cl.ir.Description }),
+			ImplementationStatus: &oscal.ImplementationStatus{State: mergedStatus(g, ctl.ID, c, c.claims, func(cl claim) string { return statusOf(cl.ir.Props) })},
+			ResponsibleRoles:     mergeRoles(c.claims, func(cl claim) []oscal.ResponsibleRole { return cl.ir.ResponsibleRoles }),
 		}
-		// Control-implementation-level values apply to every control that
-		// has the parameter; requirement-level values are specific to this
-		// control and are reported when they do not fit it.
-		params := make([]oscal.SetParameter, 0, len(c.ciParams)+len(c.ir.SetParameters))
-		params = append(params, c.ciParams...)
-		params = append(params, c.ir.SetParameters...)
-		mine := map[string][]string{}
-		var mineOrder []string
-		for i, sp := range params {
-			canon, ok := g.render.Canonical(sp.ParamID)
-			if !ok || !ctlParams[canon] {
-				if i >= len(c.ciParams) {
-					g.warn("unknown-param", "component %q sets %s on %s, which has no such parameter", c.componentName, sp.ParamID, ctl.ID)
-				}
-				continue
-			}
-			if _, seen := mine[canon]; !seen {
-				mineOrder = append(mineOrder, canon)
-			}
-			mine[canon] = slices.Clone(sp.Values) // requirement level overrides control-implementation level
-		}
+		mine, mineOrder := g.componentParams(ctl, ctlParams, c)
 		for _, canon := range mineOrder {
 			vals := mine[canon]
 			bc.SetParameters = append(bc.SetParameters, oscal.SetParameter{ParamID: canon, Values: vals})
@@ -288,26 +300,40 @@ func (g *generator) covered(ctl *oscal.Control, contribs []contribution) oscal.S
 			order = append(order, canon)
 		}
 		ir.ByComponents = append(ir.ByComponents, bc)
-		for _, st := range c.ir.Statements {
-			if !partIDs[st.StatementID] {
-				g.warn("unknown-statement", "component %q describes %s, which is not a part of %s", c.componentName, st.StatementID, ctl.ID)
-				continue
+
+		// Statement-level answers, grouped by statement id so that this
+		// component gets one by-component per statement.
+		stmtClaims := map[string][]stmtClaim{}
+		var stmtOrder []string
+		for _, cl := range c.claims {
+			for _, st := range cl.ir.Statements {
+				if !partIDs[st.StatementID] {
+					g.warn("unknown-statement", "component %q describes %s, which is not a part of %s", c.componentName, st.StatementID, ctl.ID)
+					continue
+				}
+				if _, seen := stmtClaims[st.StatementID]; !seen {
+					stmtOrder = append(stmtOrder, st.StatementID)
+				}
+				stmtClaims[st.StatementID] = append(stmtClaims[st.StatementID], stmtClaim{st: st, irProps: cl.ir.Props})
 			}
-			i, ok := stmtIdx[st.StatementID]
+		}
+		for _, sid := range stmtOrder {
+			scs := stmtClaims[sid]
+			i, ok := stmtIdx[sid]
 			if !ok {
 				i = len(ir.Statements)
-				stmtIdx[st.StatementID] = i
+				stmtIdx[sid] = i
 				ir.Statements = append(ir.Statements, oscal.SSPStatement{
-					StatementID: st.StatementID,
-					UUID:        g.opts.UUIDs.New("stmt:" + ctl.ID + ":" + st.StatementID),
+					StatementID: sid,
+					UUID:        g.opts.UUIDs.New("stmt:" + ctl.ID + ":" + sid),
 				})
 			}
 			ir.Statements[i].ByComponents = append(ir.Statements[i].ByComponents, oscal.ByComponent{
 				ComponentUUID:        c.componentUUID,
-				UUID:                 g.opts.UUIDs.New("stmt-bc:" + st.StatementID + ":" + c.componentUUID),
-				Description:          st.Description,
-				ImplementationStatus: &oscal.ImplementationStatus{State: statusOf(st.Props, c.ir.Props)},
-				ResponsibleRoles:     stripParties(st.ResponsibleRoles),
+				UUID:                 g.opts.UUIDs.New("stmt-bc:" + sid + ":" + c.componentUUID),
+				Description:          joinDistinct(scs, func(sc stmtClaim) string { return sc.st.Description }),
+				ImplementationStatus: &oscal.ImplementationStatus{State: mergedStatus(g, sid, c, scs, func(sc stmtClaim) string { return statusOf(sc.st.Props, sc.irProps) })},
+				ResponsibleRoles:     mergeRoles(scs, func(sc stmtClaim) []oscal.ResponsibleRole { return sc.st.ResponsibleRoles }),
 			})
 		}
 	}
@@ -315,6 +341,116 @@ func (g *generator) covered(ctl *oscal.Control, contribs []contribution) oscal.S
 		ir.SetParameters = append(ir.SetParameters, oscal.SetParameter{ParamID: id, Values: values[id]})
 	}
 	return ir
+}
+
+// stmtClaim is one statement answer of a component, with the props of its
+// implemented-requirement (which supply the default status).
+type stmtClaim struct {
+	st      oscal.ComponentStatement
+	irProps []oscal.Property
+}
+
+// componentParams returns the parameter values one component sets on ctl,
+// canonicalized and in first-seen order. Within a requirement,
+// requirement-level values override control-implementation-level values;
+// across the component's requirements for the same control, the first
+// value wins and a different later value is reported.
+func (g *generator) componentParams(ctl *oscal.Control, ctlParams map[string]bool, c contribution) (map[string][]string, []string) {
+	mine := map[string][]string{}
+	var mineOrder []string
+	for _, cl := range c.claims {
+		// Control-implementation-level values apply to every control that
+		// has the parameter; requirement-level values are specific to this
+		// control and are reported when they do not fit it.
+		params := make([]oscal.SetParameter, 0, len(cl.ciParams)+len(cl.ir.SetParameters))
+		params = append(params, cl.ciParams...)
+		params = append(params, cl.ir.SetParameters...)
+		claimVals := map[string][]string{}
+		var claimOrder []string
+		for i, sp := range params {
+			canon, ok := g.render.Canonical(sp.ParamID)
+			if !ok || !ctlParams[canon] {
+				if i >= len(cl.ciParams) {
+					g.warn("unknown-param", "component %q sets %s on %s, which has no such parameter", c.componentName, sp.ParamID, ctl.ID)
+				}
+				continue
+			}
+			if _, seen := claimVals[canon]; !seen {
+				claimOrder = append(claimOrder, canon)
+			}
+			claimVals[canon] = slices.Clone(sp.Values) // requirement level overrides control-implementation level
+		}
+		for _, canon := range claimOrder {
+			vals := claimVals[canon]
+			if prev, seen := mine[canon]; seen {
+				if !slices.Equal(prev, vals) {
+					g.warn("conflicting-param", "%s: %s set to %q and %q by %s (source %s); keeping the first", ctl.ID, canon, prev, vals, c.componentName, cl.source)
+				}
+				continue
+			}
+			mine[canon] = vals
+			mineOrder = append(mineOrder, canon)
+		}
+	}
+	return mine, mineOrder
+}
+
+// statusRank orders implementation states from most to least complete, for
+// merging one component's claims; values outside OSCAL's allowed set rank
+// last (the semantic checker reports them).
+var statusRank = map[string]int{"implemented": 0, "not-applicable": 1, "alternative": 2, "partial": 3, "planned": 4}
+
+func rankOf(s string) int {
+	if r, ok := statusRank[s]; ok {
+		return r
+	}
+	return len(statusRank)
+}
+
+// mergedStatus returns the least complete status among one component's
+// claims for the same control or statement, reporting a disagreement.
+func mergedStatus[T any](g *generator, target string, c contribution, items []T, status func(T) string) string {
+	w := status(items[0])
+	differ := false
+	for _, it := range items[1:] {
+		s := status(it)
+		if s != w {
+			differ = true
+		}
+		if rankOf(s) > rankOf(w) {
+			w = s
+		}
+	}
+	if differ {
+		g.warn("conflicting-status", "%s: component %q gives different implementation statuses; keeping the least complete, %q", target, c.componentName, w)
+	}
+	return w
+}
+
+// joinDistinct joins the distinct non-empty descriptions of items, in
+// order, separated by a blank line.
+func joinDistinct[T any](items []T, desc func(T) string) string {
+	var out []string
+	for _, it := range items {
+		if d := desc(it); d != "" && !slices.Contains(out, d) {
+			out = append(out, d)
+		}
+	}
+	return strings.Join(out, "\n\n")
+}
+
+// mergeRoles unions the responsible roles of items by role id (the first
+// occurrence of a role wins), without party references.
+func mergeRoles[T any](items []T, roles func(T) []oscal.ResponsibleRole) []oscal.ResponsibleRole {
+	var out []oscal.ResponsibleRole
+	for _, it := range items {
+		for _, rr := range stripParties(roles(it)) {
+			if !slices.ContainsFunc(out, func(o oscal.ResponsibleRole) bool { return o.RoleID == rr.RoleID }) {
+				out = append(out, rr)
+			}
+		}
+	}
+	return out
 }
 
 // uncovered builds a planned this-system requirement for an unaddressed
