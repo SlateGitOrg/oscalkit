@@ -179,24 +179,32 @@ adds to prose. oscalkit's output is byte-identical to the source catalog's contr
 
 1. Build `system-implementation`: a `this-system` component, plus one system component per
    defined component (the uuid is reused, and a clash gets a new uuid and a warning).
-2. Index the contributions as `control-id → [(component, implemented-requirement, CI-level
-   set-params)]`. Contributions for controls outside the baseline produce `not-in-baseline`
-   warnings.
+2. Index the contributions as `control-id → [(component, claims)]`, where a claim is one
+   implemented-requirement with its control-implementation's set-params and `source`. A component
+   that claims the same control more than once (in several control-implementations, e.g. one per
+   baseline revision) gets a single contribution holding all of its claims, and a
+   `merged-implementations` warning. Contributions for controls outside the baseline produce
+   `not-in-baseline` warnings. `source` is not used to filter claims (see DECISIONS.md).
 3. Walk the baseline in document order, skipping withdrawn controls. A covered control gets one
-   by-component per contribution, with:
-   - the description;
-   - the status from the `implementation-status` prop, `implemented` by default;
+   by-component per (control, component) pair, with:
+   - the distinct descriptions of the component's claims, joined by blank lines;
+   - the status from the `implementation-status` prop, `implemented` by default; when the
+     component's claims disagree, the least complete status wins (`conflicting-status` warning);
    - parameters canonicalized through the renderer, with requirement-level values overriding
-     CI-level values within a component, and the first component winning across components (a
-     conflict produces a warning);
-   - statements merged by statement id (unknown ids produce warnings);
-   - responsible roles, without party references.
+     CI-level values within a claim, and the first claim (then the first component) winning
+     otherwise (a conflict produces a `conflicting-param` warning);
+   - statements merged by statement id, one statement by-component per component, merged the same
+     way (unknown ids produce warnings);
+   - responsible roles unioned by role id, without party references.
 
+   Generated uuids are derived from (control, component) and (statement, component), which are
+   unique after merging; a component uuid repeated across inputs is replaced by a fresh one.
    An uncovered control gets a planned placeholder attributed to `this-system`.
 4. Collect the metadata roles from every responsible role used. Fill system characteristics with
    `[Placeholder]` text and the optional FIPS-199 level.
 
-The CLI self-checks the result against the SSP schema before writing it. Generation is O(n + c),
+The CLI self-checks the result against the SSP schema and the semantic checks of `check` (unique
+uuids, resolvable references, allowed states) before writing it; a failure writes nothing. Generation is O(n + c),
 where c is the number of component requirements.
 
 ## 6. Gap analysis (`gaps`)

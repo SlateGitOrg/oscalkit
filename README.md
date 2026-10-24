@@ -45,7 +45,7 @@ diff against.
 | Profile resolution | Import phase: `include-all`, `with-ids`, glob `matching`, `with-child-controls`, `exclude-controls` (exclusion wins), nested profile imports, `#uuid` back-matter imports (rlink JSON/YAML or base64), cycle detection with the full chain in the error, depth limit. Merge phase: `combine` `use-first` / `keep`; structuring `flat` / `as-is` (with up-levelling) / `custom` (groups, `insert-controls`, `order`). Modify phase: `set-parameters` and `alters` with `adds` (implicit and `by-id`, at all four positions, including nested parts and child controls) and `removes` (`by-id/name/class/ns/item-name`). Final operations: metadata, combined back-matter with `keep=always`, pruning of unreferenced resources and loose params. |
 | Parameter substitution | Renders `{{ insert: param, id }}` with values, selections (`[Selection (one or more): …]`), assignments (`[Assignment: …]`), SP 800-53 `aggregates` params, and legacy `alt-identifier` ids such as `ac-1_prm_2`. |
 | Validation | Official OSCAL 1.2.3 JSON schemas are embedded, and violations are reported as JSON Pointers. Semantic checks cover what the schema cannot express: duplicate ids/uuids, dangling `#` links and param inserts, unknown roles/parties/components, statement/control mismatches, invalid implementation states. |
-| SSP generation | Builds a schema-valid SSP from component definitions. Each baseline control gets an implemented-requirement with one by-component per contributing component, plus statements, parameter values and roles. Uncovered controls become `planned` placeholders. `--seed` makes output reproducible. |
+| SSP generation | Builds a schema-valid SSP from component definitions. Each baseline control gets an implemented-requirement with one by-component per contributing component (a component's repeated claims for a control are merged), plus statements, parameter values and roles. The output is self-checked against the schema and the semantic checks before it is written. Uncovered controls become `planned` placeholders. `--seed` makes output reproducible. |
 | Gap analysis | Finds missing controls, planned/partial/unspecified status, unjustified not-applicable, unset parameters, uncovered statement items, unknown statements/components/parameters, controls outside the baseline and withdrawn controls. Reports a per-family summary in text, Markdown or JSON, with a `--fail-on` exit code for CI. |
 | Compare | Diffs two catalogs or profiles: control set, order, placement, normalized content, groups and back-matter. |
 
@@ -187,9 +187,9 @@ Every number below comes from the command shown next to it, run on macOS arm64 (
 | Controls whose only difference from NIST's resolved catalogs is whitespace | 60 / 84 / 103 / 32 (LOW/MOD/HIGH/PRIVACY). Every one of them is byte-identical to the source catalog, so the whitespace was added by NIST's XSLT resolver. | `bin/oscalkit compare --exact --format json <profile> <nist-resolved>` and `bin/oscalkit compare --exact <HIGH profile> <catalog>` (0 changed) |
 | NIST content with zero schema violations and zero semantic findings | 9 / 9 files | `go test ./check -run NIST` and `bin/oscalkit validate testdata/oscal-content/nist.gov/SP800-53/rev5/json/*.json*` |
 | Resolve the HIGH baseline (read + gunzip the 11 MB catalog + resolve) | 94–138 ms/op, about 70 MB allocated/op (5 runs) | `make bench` |
-| Core-package statement coverage | 95.8 % (gate: 80 %) | `make cover` |
-| Per-package coverage | oscal 92.3, schema 93.3, resolve 94.9, param 99.3, check 98.3, catdiff 93.1, sspgen 100, gaps 96.2, cli 93.1 | `go test -cover ./...` |
-| Size | 6,090 lines of non-test Go (5,108 excluding blanks and comments); 2,638 lines of tests (2,429 code lines) | `make loc` |
+| Core-package statement coverage | 96.0 % (gate: 80 %) | `make cover` |
+| Per-package coverage | oscal 92.3, schema 93.3, resolve 94.9, param 99.3, check 98.3, catdiff 93.1, sspgen 100, gaps 96.2, cli 93.2 | `go test -cover ./...` |
+| Size | 6,242 lines of non-test Go (5,221 excluding blanks and comments); 2,855 lines of tests (2,626 code lines) | `make loc` |
 
 The spec-example tests are in `resolve/*_test.go`. They reproduce the specification's examples
 (include-with-children, use-first, modify-adds, without-parent), and the modify-adds case is a
