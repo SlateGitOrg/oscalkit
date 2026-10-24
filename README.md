@@ -189,7 +189,7 @@ Every number below comes from the command shown next to it, run on macOS arm64 (
 | Resolve the HIGH baseline (read + gunzip the 11 MB catalog + resolve) | 94–138 ms/op, about 70 MB allocated/op (5 runs) | `make bench` |
 | Core-package statement coverage | 95.8 % (gate: 80 %) | `make cover` |
 | Per-package coverage | oscal 92.3, schema 93.3, resolve 94.9, param 99.3, check 98.3, catdiff 93.1, sspgen 100, gaps 96.2, cli 93.1 | `go test -cover ./...` |
-| Size | 6,090 lines of non-test Go (5,108 excluding blanks and comments); 2,578 lines of tests | `make loc` |
+| Size | 6,090 lines of non-test Go (5,108 excluding blanks and comments); 2,638 lines of tests (2,429 code lines) | `make loc` |
 
 The spec-example tests are in `resolve/*_test.go`. They reproduce the specification's examples
 (include-with-children, use-first, modify-adds, without-parent), and the modify-adds case is a
