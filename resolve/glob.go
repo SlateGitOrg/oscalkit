@@ -11,13 +11,15 @@ func globMatch(pattern, s string) bool {
 	star, mark := -1, 0
 	for si < len(r) {
 		switch {
-		case pi < len(p) && (p[pi] == '?' || p[pi] == r[si]):
-			pi++
-			si++
 		case pi < len(p) && p[pi] == '*':
+			// Checked first: a literal '*' in the input must not consume
+			// the wildcard as an ordinary character.
 			star = pi
 			mark = si
 			pi++
+		case pi < len(p) && (p[pi] == '?' || p[pi] == r[si]):
+			pi++
+			si++
 		case star >= 0:
 			pi = star + 1
 			mark++
