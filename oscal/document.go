@@ -235,27 +235,38 @@ func yamlToJSON(data []byte) ([]byte, error) {
 	if node.Kind == 0 {
 		return nil, errors.New("empty document")
 	}
-	v, err := yamlValue(&node)
+	budget := maxYAMLNodes
+	v, err := yamlValue(&node, &budget)
 	if err != nil {
 		return nil, err
 	}
 	return json.Marshal(v)
 }
 
-func yamlValue(n *yaml.Node) (any, error) {
+// maxYAMLNodes bounds the number of nodes produced when expanding YAML,
+// defeating alias-expansion ("billion laughs") attacks.
+const maxYAMLNodes = 20_000_000
+
+var errYAMLTooLarge = errors.New("yaml document expands to too many nodes (alias bomb?)")
+
+func yamlValue(n *yaml.Node, budget *int) (any, error) {
+	*budget--
+	if *budget < 0 {
+		return nil, errYAMLTooLarge
+	}
 	switch n.Kind {
 	case yaml.DocumentNode:
 		if len(n.Content) == 0 {
 			return nil, nil
 		}
-		return yamlValue(n.Content[0])
+		return yamlValue(n.Content[0], budget)
 	case yaml.AliasNode:
-		return yamlValue(n.Alias)
+		return yamlValue(n.Alias, budget)
 	case yaml.MappingNode:
 		m := make(map[string]any, len(n.Content)/2)
 		for i := 0; i+1 < len(n.Content); i += 2 {
 			k := n.Content[i].Value
-			v, err := yamlValue(n.Content[i+1])
+			v, err := yamlValue(n.Content[i+1], budget)
 			if err != nil {
 				return nil, err
 			}
@@ -265,7 +276,7 @@ func yamlValue(n *yaml.Node) (any, error) {
 	case yaml.SequenceNode:
 		s := make([]any, 0, len(n.Content))
 		for _, c := range n.Content {
-			v, err := yamlValue(c)
+			v, err := yamlValue(c, budget)
 			if err != nil {
 				return nil, err
 			}
