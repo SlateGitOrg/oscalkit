@@ -15,7 +15,7 @@ func runRender(ctx context.Context, e *env, args []string) int {
 	rf.register(fs)
 	baseline := fs.String("baseline", "", "profile or catalog containing the controls (required)")
 	sspPath := fs.String("ssp", "", "apply the parameter values set in this SSP")
-	var sets listFlag
+	var sets multiFlag
 	fs.Var(&sets, "set", "override a parameter: id=value (repeatable)")
 	pos, code, ok := interleave(fs, args)
 	if !ok {

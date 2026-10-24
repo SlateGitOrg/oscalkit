@@ -208,3 +208,21 @@ func (l *listFlag) Set(v string) error {
 	}
 	return nil
 }
+
+// writeDoc writes v as JSON to path, or to the command's stdout for "-".
+func writeDoc(e *env, path string, v any) error {
+	if path == "-" || path == "" {
+		return oscal.Encode(e.stdout, v)
+	}
+	return oscal.WriteFile(path, v)
+}
+
+// multiFlag collects repeated string flags verbatim (values may contain commas).
+type multiFlag []string
+
+func (m *multiFlag) String() string { return strings.Join(*m, "; ") }
+
+func (m *multiFlag) Set(v string) error {
+	*m = append(*m, v)
+	return nil
+}

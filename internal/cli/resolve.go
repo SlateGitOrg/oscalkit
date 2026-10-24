@@ -26,7 +26,7 @@ func runResolve(ctx context.Context, e *env, args []string) int {
 	if err != nil {
 		return e.errorf("resolve: %v", err)
 	}
-	if err := oscal.WriteFile(*out, oscal.Document{Catalog: res.Catalog}); err != nil {
+	if err := writeDoc(e, *out, oscal.Document{Catalog: res.Catalog}); err != nil {
 		return e.errorf("%v", err)
 	}
 	if !*quiet {

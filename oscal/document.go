@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -66,8 +67,14 @@ func (d *Document) Model() Model {
 
 // ReadFile loads an OSCAL document from disk. Gzip-compressed files are
 // detected by their magic bytes; YAML is detected by extension or content.
+// When path does not exist but path+".gz" does, the compressed copy is read.
 func ReadFile(path string) (*Document, error) {
 	f, err := os.Open(path)
+	if errors.Is(err, fs.ErrNotExist) {
+		if gz, gzErr := os.Open(path + ".gz"); gzErr == nil {
+			f, err = gz, nil
+		}
+	}
 	if err != nil {
 		return nil, fmt.Errorf("oscal: %w", err)
 	}

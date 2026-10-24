@@ -71,7 +71,7 @@ func runGenerate(ctx context.Context, e *env, args []string) int {
 	if len(vs) > 0 {
 		return e.errorf("generate: produced a schema-invalid SSP (bug): %v", vs[0])
 	}
-	if err := oscal.WriteFile(*out, oscal.Document{SSP: res.SSP}); err != nil {
+	if err := writeDoc(e, *out, oscal.Document{SSP: res.SSP}); err != nil {
 		return e.errorf("generate: %v", err)
 	}
 	st := res.Stats
