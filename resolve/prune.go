@@ -3,8 +3,8 @@ package resolve
 import (
 	"encoding/json"
 
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/param"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/param"
 )
 
 // combineBackMatter merges back-matter from the imported sources (in import

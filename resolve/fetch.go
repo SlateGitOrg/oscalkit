@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 // Fetcher retrieves the bytes of an imported document given its absolute URI.

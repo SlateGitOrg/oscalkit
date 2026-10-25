@@ -4,7 +4,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 // maxDepth bounds recursive substitution (selection choices and aggregated

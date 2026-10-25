@@ -13,8 +13,8 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/param"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/param"
 )
 
 // OSCALVersion is the OSCAL version declared by generated SSPs.

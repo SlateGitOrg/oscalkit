@@ -1,4 +1,4 @@
-module github.com/archit2501/oscalkit
+module github.com/SlateGitOrg/oscalkit
 
 go 1.25.0
 

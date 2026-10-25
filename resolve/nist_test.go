@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/archit2501/oscalkit/catdiff"
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/schema"
+	"github.com/SlateGitOrg/oscalkit/catdiff"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/schema"
 )
 
 const nistDir = "../testdata/oscal-content/nist.gov/SP800-53/rev5/json"

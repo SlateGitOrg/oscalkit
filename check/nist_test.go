@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 // TestNISTContentIsClean ensures the semantic checks raise no false

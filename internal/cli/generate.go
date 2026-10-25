@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/archit2501/oscalkit/check"
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/schema"
-	"github.com/archit2501/oscalkit/sspgen"
+	"github.com/SlateGitOrg/oscalkit/check"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/schema"
+	"github.com/SlateGitOrg/oscalkit/sspgen"
 )
 
 func runGenerate(ctx context.Context, e *env, args []string) int {

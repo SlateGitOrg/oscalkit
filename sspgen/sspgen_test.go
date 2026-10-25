@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/archit2501/oscalkit/check"
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/resolve"
-	"github.com/archit2501/oscalkit/schema"
+	"github.com/SlateGitOrg/oscalkit/check"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/resolve"
+	"github.com/SlateGitOrg/oscalkit/schema"
 )
 
 const examples = "../examples"

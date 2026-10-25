@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/resolve"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/resolve"
 )
 
 func runResolve(ctx context.Context, e *env, args []string) int {

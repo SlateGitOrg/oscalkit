@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/resolve"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/resolve"
 )
 
 // Version is the oscalkit version, overridable at link time.

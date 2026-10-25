@@ -6,7 +6,7 @@ package main
 import (
 	"os"
 
-	"github.com/archit2501/oscalkit/internal/cli"
+	"github.com/SlateGitOrg/oscalkit/internal/cli"
 )
 
 func main() {

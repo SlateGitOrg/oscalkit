@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/archit2501/oscalkit/catdiff"
+	"github.com/SlateGitOrg/oscalkit/catdiff"
 )
 
 func runCompare(ctx context.Context, e *env, args []string) int {

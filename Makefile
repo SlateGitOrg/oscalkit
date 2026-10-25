@@ -10,7 +10,7 @@ export GOFLAGS ?= -p=3
 # but reported separately).
 CORE_PKGS := ./oscal/... ./schema/... ./resolve/... ./param/... ./check/... ./catdiff/... ./sspgen/... ./gaps/...
 CORE_LIST := $(shell echo $(CORE_PKGS) | sed 's|\./||g; s|/\.\.\.||g; s| |,|g')
-MODULE    := github.com/archit2501/oscalkit
+MODULE    := github.com/SlateGitOrg/oscalkit
 
 .PHONY: check fmt-check fmt vet lint test cover cover-html build demo bench fuzz fetch-content loc clean
 

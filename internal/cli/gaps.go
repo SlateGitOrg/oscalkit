@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/archit2501/oscalkit/gaps"
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/gaps"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 func runGaps(ctx context.Context, e *env, args []string) int {

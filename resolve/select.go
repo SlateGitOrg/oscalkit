@@ -1,7 +1,7 @@
 package resolve
 
 import (
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 // hierarchy is the parent/child structure of the controls in one catalog.

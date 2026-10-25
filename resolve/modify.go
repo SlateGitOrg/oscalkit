@@ -3,7 +3,7 @@ package resolve
 import (
 	"slices"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 // defaultNS is the namespace of props and parts that declare none.

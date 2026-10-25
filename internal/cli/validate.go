@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/archit2501/oscalkit/check"
-	"github.com/archit2501/oscalkit/oscal"
-	"github.com/archit2501/oscalkit/schema"
+	"github.com/SlateGitOrg/oscalkit/check"
+	"github.com/SlateGitOrg/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/schema"
 )
 
 // fileReport is the validation outcome for one file.

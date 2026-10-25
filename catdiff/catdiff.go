@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 // Report is the difference between catalog A and catalog B.

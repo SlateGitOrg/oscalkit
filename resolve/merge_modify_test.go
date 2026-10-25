@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 func TestCombineUseFirstVersusKeep(t *testing.T) {

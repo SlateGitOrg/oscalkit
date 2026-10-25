@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 const (

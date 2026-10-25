@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/archit2501/oscalkit/oscal"
+	"github.com/SlateGitOrg/oscalkit/oscal"
 )
 
 // ToolOSCALVersion is the OSCAL version this resolver implements. Output

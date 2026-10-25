@@ -1,5 +1,7 @@
 # oscalkit
 
+[![CI](https://github.com/SlateGitOrg/oscalkit/actions/workflows/ci.yml/badge.svg)](https://github.com/SlateGitOrg/oscalkit/actions/workflows/ci.yml)
+
 A Go toolkit and CLI for [NIST OSCAL](https://pages.nist.gov/OSCAL/) compliance-as-code. It loads
 catalogs, profiles, component definitions and System Security Plans (SSPs). It resolves profiles
 following the NIST profile-resolution specification, substitutes parameters, generates SSP
@@ -227,8 +229,8 @@ in [DECISIONS.md](DECISIONS.md).
   follows a documented ruling (see DECISIONS.md), and another resolver may differ. Examples:
   ordering of `custom` inserts, merging of same-id groups across `as-is` imports, and `remove`
   matching links by `rel`. Only the four NIST baselines are checked against an external reference
-  implementation. The other behaviours are checked against the spec text and examples, as I
-  interpret them.
+  implementation. The other behaviours are checked against the spec text and examples, as
+  interpreted from them.
 - **Import `mapping` is not implemented.** It is absent from the OSCAL 1.2.3 JSON schema.
   Deprecated `combine: merge` is rejected rather than guessed at.
 - **Semantic checks cover a subset of the metaschema constraints.** They do not evaluate
@@ -240,8 +242,6 @@ in [DECISIONS.md](DECISIONS.md).
   `implementation-status` prop. Leveraged authorizations, inventory and users are not generated.
 - **The resolver is single-threaded and fully in memory.** That is fine for SP 800-53 (about 0.1 s
   for HIGH) but not designed for multi-GB catalogs.
-- The CI workflow (`.github/workflows/ci.yml`) has not been executed yet, because the repository
-  has not been pushed.
 
 ## Roadmap
 
