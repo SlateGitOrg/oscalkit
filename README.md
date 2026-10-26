@@ -203,7 +203,7 @@ The bug is fixed, and the failing input is kept as a regression seed in
 
 ## Design decisions
 
-The main ones are below. All rulings, with the reasoning and the cost if they turn out wrong, are
+The main ones are below. All decisions, with the reasoning and the cost if they turn out wrong, are
 in [DECISIONS.md](DECISIONS.md).
 
 - **NIST's reference resolver is the arbiter where the draft spec contradicts itself.** The spec's
@@ -226,7 +226,7 @@ in [DECISIONS.md](DECISIONS.md).
 - **XML is not supported.** Inputs are JSON or YAML. Back-matter rlinks that point only at XML
   cannot be followed.
 - **The spec is still a draft.** Where the specification is silent or contradictory, oscalkit
-  follows a documented ruling (see DECISIONS.md), and another resolver may differ. Examples:
+  follows a documented decision (see DECISIONS.md), and another resolver may differ. Examples:
   ordering of `custom` inserts, merging of same-id groups across `as-is` imports, and `remove`
   matching links by `rel`. Only the four NIST baselines are checked against an external reference
   implementation. The other behaviours are checked against the spec text and examples, as

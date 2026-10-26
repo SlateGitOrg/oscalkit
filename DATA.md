@@ -21,7 +21,7 @@ the files and verifies them against the same sums.
   Universal. Redistribution here is unmodified apart from compression.
 - **Use:** the four resolved catalogs are the *expected output* for the conformance test
   (`resolve/nist_test.go`). They are never used to tune the resolver's behaviour beyond the one
-  documented ruling about ancestor inclusion (DECISIONS.md).
+  documented decision about ancestor inclusion (DECISIONS.md).
 
 ## OSCAL JSON schemas
 
